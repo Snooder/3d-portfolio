@@ -85,7 +85,7 @@ const latestExperiences = [
     finalNote: "NewsIQ is designed for teams that publish consistently and need better tools to manage information. Each feature focuses on reducing friction in the content pipeline while improving output quality.",
     icons: [
       { name: "FaReact", label: "React", description: "Built a React editorial workspace with a focused writing environment, drag-and-drop story pipeline, and team assignment board for managing active coverage." },
-      { name: "FaBrain", label: "AI", description: "Integrated AI throughout the editorial workflow — from source summarization and structure suggestions to headline generation and coverage gap detection." },
+      { name: "FaBrain", label: "AI", description: "Integrated AI throughout the editorial workflow, from source summarization and structure suggestions to headline generation and coverage gap detection." },
       { name: "FaGolang", label: "Go", description: "Built a Go backend to handle content ingestion, external source aggregation, real-time collaborative editing state, and publication scheduling." },
       { name: "FaDatabase", label: "PostgreSQL", description: "Designed a PostgreSQL content store with full versioning, tag taxonomy, and publication state management to support complex multi-stage editorial workflows." },
     ],
@@ -212,7 +212,7 @@ const experiences = [
       {
         name: "FaGolang",
         label: "Go",
-        description: "Engineered backend services in Go that power high-volume data ingestion, real-time querying, and tenant-isolated APIs — forming the core of a shared platform layer reused across all Snydex products."
+        description: "Engineered backend services in Go that power high-volume data ingestion, real-time querying, and tenant-isolated APIs, forming the core of a shared platform layer reused across all Snydex products."
       },
       {
         name: "FaPython",
@@ -475,7 +475,7 @@ const events = [
 ];
 
 const githubRepos = {
-  JavaScript: [
+  "TypeScript / JavaScript": [
     {
       name: "WeatherOrNot",
       visibility: "Private",
@@ -517,6 +517,30 @@ const githubRepos = {
       visibility: "Public",
       description: "A JavaScript project built for creating music countdown timers in Streamlabs OBS, leveraging JavaScript and OBS plugins.",
       lastUpdated: "Updated on Jul 26, 2020",
+    },
+    {
+      name: "shopifywall",
+      visibility: "Private",
+      description: "TypeScript-based project for building an admin template using Chakra UI and React.",
+      lastUpdated: "Updated on Feb 2",
+    },
+    {
+      name: "UltimateHandicapper",
+      visibility: "Private",
+      description: "TypeScript project focused on the Ultimate Handicapper betting system, utilizing React.",
+      lastUpdated: "Updated on Mar 16, 2021",
+    },
+    {
+      name: "Beanstalk",
+      visibility: "Private",
+      description: "Custom TypeScript solution developed for a financial services company.",
+      lastUpdated: "Updated on May 29, 2021",
+    },
+    {
+      name: "nativescript-filter-select",
+      visibility: "Public",
+      description: "TypeScript project for building a filter select plugin in NativeScript, forked from moayadnajd.",
+      lastUpdated: "Updated on Jun 20, 2019",
     },
   ],
   Python: [
@@ -625,38 +649,6 @@ const githubRepos = {
       lastUpdated: "Updated on Jan 16, 2023",
     },
   ],
-  TypeScript: [
-    {
-      name: "shopifywall",
-      visibility: "Private",
-      description: "TypeScript-based project for building an admin template using Chakra UI and React.",
-      lastUpdated: "Updated on Feb 2",
-    },
-    {
-      name: "UltimateHandicapper",
-      visibility: "Private",
-      description: "TypeScript project focused on the Ultimate Handicapper betting system, utilizing React.",
-      lastUpdated: "Updated on Mar 16, 2021",
-    },
-    {
-      name: "fashion-ios",
-      visibility: "Private",
-      description: "TypeScript-based Fashion iOS App developed with modern UI frameworks.",
-      lastUpdated: "Updated on Mar 16, 2021",
-    },
-    {
-      name: "Beanstalk",
-      visibility: "Private",
-      description: "Custom TypeScript solution developed for a financial services company.",
-      lastUpdated: "Updated on May 29, 2021",
-    },
-    {
-      name: "nativescript-filter-select",
-      visibility: "Public",
-      description: "TypeScript project for building a filter select plugin in NativeScript, forked from moayadnajd.",
-      lastUpdated: "Updated on Jun 20, 2019",
-    },
-  ],
   C: [
     {
       name: "TCPServerClient",
@@ -723,4 +715,3 @@ const technologySentences = {
 
 
 export { technologySentences, experiences, recentProjects, events, githubRepos, latestExperiences, IconShadows };
-

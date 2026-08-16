@@ -1,6 +1,47 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
+import {
+  FaLinkedin,
+  FaGithub,
+  FaEnvelope,
+  FaTimes,
+  FaRocket,
+  FaSyncAlt,
+  FaUsers,
+  FaLandmark,
+  FaUtensils,
+  FaCannabis,
+  FaFileInvoiceDollar,
+  FaHeartbeat,
+  FaPython,
+  FaReact,
+  FaDatabase,
+  FaAws,
+} from 'react-icons/fa';
+import { FaGolang } from 'react-icons/fa6';
+import { SiCloudflare } from 'react-icons/si';
+
+const engagementTypes = [
+  { icon: FaRocket, accent: '#38bdf8', title: 'Greenfield builds', desc: 'Taking an idea all the way to production.' },
+  { icon: FaSyncAlt, accent: '#a78bfa', title: 'Modernization', desc: 'Replacing legacy systems with something that scales.' },
+  { icon: FaUsers, accent: '#34d399', title: 'Embedded delivery', desc: 'Working inside your team to ship fast.' },
+];
+
+const products = [
+  { name: 'MuseumIQ', icon: FaLandmark, accent: '#38bdf8', desc: 'Collections and operations for museums, centralizing artifacts, exhibits, and workflows.' },
+  { name: 'RestaurantIQ', icon: FaUtensils, accent: '#a78bfa', desc: 'Operational intelligence for hospitality teams, streamlining compliance and daily workflows.' },
+  { name: 'WeedBuddy', icon: FaCannabis, accent: '#34d399', desc: 'Compliance-ready retail platform for dispensaries, unifying tracking and reporting.' },
+  { name: 'Snydex Invoice', icon: FaFileInvoiceDollar, accent: '#fbbf24', desc: 'Modern billing workflow system that automates invoicing at scale.' },
+];
+
+const techStack = [
+  { icon: FaGolang, label: 'Go', color: '#00add8' },
+  { icon: FaPython, label: 'Python', color: '#3776ab' },
+  { icon: FaReact, label: 'React', color: '#61dafb' },
+  { icon: FaDatabase, label: 'PostgreSQL', color: '#34d399' },
+  { icon: FaAws, label: 'AWS', color: '#ff9900' },
+  { icon: SiCloudflare, label: 'Cloudflare', color: '#f38020' },
+];
 
 const AboutMeModal = ({ onClose }) => {
   useEffect(() => {
@@ -21,76 +62,143 @@ const AboutMeModal = ({ onClose }) => {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-sm"
       style={{ backgroundColor: 'rgba(2, 6, 23, 0.82)' }}
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[calc(100vh-3rem)] w-full max-w-2xl flex-col rounded-2xl border border-white/20 bg-gray-900 shadow-2xl"
+        className="relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#090e1d]/95 shadow-[0_28px_90px_rgba(0,0,0,0.45)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-8 pb-4 pt-7">
-          <h2 className="text-2xl font-bold text-white">It&apos;s nice to meet you</h2>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.16),transparent_55%)]" />
+
+        <div className="relative flex items-start justify-between border-b border-white/10 px-6 pb-4 pt-6 sm:px-8">
+          <div>
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.35em] text-sky-300/80">
+              About
+            </p>
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              It&apos;s nice to meet you <span className="inline-block">👋</span>
+            </h2>
+          </div>
           <button
             onClick={onClose}
-            className="text-2xl leading-none text-white/50 transition-colors hover:text-white"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
             aria-label="Close"
           >
-            ✕
+            <FaTimes className="text-sm" />
           </button>
         </div>
 
-        <div className="flex flex-col gap-4 overflow-y-auto px-8 py-6 text-sm leading-relaxed text-white/90 sm:text-base">
-          <p>I&apos;m Matt, a full stack engineer focused on creating software that helps people and businesses.</p>
-          <p>I work at the intersection of systems, data, and product, usually starting with a simple question: where is something manual, slow, or breaking down, and how can software make it seamless?</p>
-          <p>Today, I run <strong>Snydex Platforms</strong>, where I design and build custom SaaS products and internal systems for businesses that have outgrown spreadsheets, disconnected tools, or fragile workflows.</p>
-          <p>Most engagements fall into a few categories. Greenfield platform builds, where we take an idea from 0 to production. Modernization work, where we replace legacy systems with something scalable. And embedded delivery, where I work directly inside a team to ship production systems in tight timelines. The goal is not just to build software, but to create systems that hold up under real operations.</p>
-          <p>A lot of this work has turned into full platforms.</p>
-          <table className="w-full border-collapse text-sm">
-            <tbody>
-              {[
-                { name: 'MuseumIQ', desc: 'Collections and operations system for museums, centralizing artifacts, exhibits, and institutional workflows into a single platform.' },
-                { name: 'RestaurantIQ', desc: 'Operational intelligence for hospitality teams, streamlining documentation, compliance, and day-to-day workflows.' },
-                { name: 'WeedBuddy', desc: 'Compliance-ready retail platform for dispensaries, unifying product tracking, reporting, and operational processes.' },
-                { name: 'Snydex Invoice', desc: 'Modern billing and document workflow system designed to automate invoicing and financial operations at scale.' },
-              ].map(({ name, desc }) => (
-                <tr key={name} className="border-b border-white/10 last:border-0">
-                  <td className="w-[140px] whitespace-nowrap py-2 pr-4 align-top font-bold text-white">{name}</td>
-                  <td className="py-2 align-top text-white/75">{desc}</td>
-                </tr>
+        <div className="relative flex flex-col gap-4 overflow-y-auto px-6 py-5 text-sm leading-6 text-slate-300 sm:px-8 sm:text-base">
+          <p>
+            I&apos;m Matt, a full stack engineer. I like finding the part of a business that&apos;s manual, slow, or quietly falling apart, and building something that actually fixes it.
+          </p>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {engagementTypes.map(({ icon: Icon, accent, title, desc }) => (
+              <div
+                key={title}
+                className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+              >
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-full"
+                  style={{ backgroundColor: `${accent}1a`, color: accent }}
+                >
+                  <Icon className="text-sm" />
+                </span>
+                <p className="text-sm font-semibold text-white">{title}</p>
+                <p className="text-xs leading-5 text-slate-400">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <p>
+            These days I run <strong className="text-white">Snydex Platforms</strong>, building custom software for businesses that have outgrown spreadsheets and duct-taped tools. A few of those projects grew into full products:
+          </p>
+
+          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/[0.03]">
+            {products.map(({ name, icon: Icon, accent, desc }) => (
+              <div
+                key={name}
+                className="flex items-start gap-3 border-b border-white/10 px-4 py-3 last:border-0"
+              >
+                <span
+                  className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
+                  style={{ backgroundColor: `${accent}1a`, color: accent }}
+                >
+                  <Icon className="text-xs" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-white">{name}</p>
+                  <p className="text-xs leading-5 text-slate-400">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Built primarily with
+            </p>
+            <div className="flex flex-wrap gap-4">
+              {techStack.map(({ icon: Icon, label, color }) => (
+                <div key={label} className="flex flex-col items-center gap-1.5">
+                  <span
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] transition-transform hover:-translate-y-0.5"
+                    style={{ color }}
+                  >
+                    <Icon className="text-base" />
+                  </span>
+                  <span className="text-[10px] font-medium uppercase tracking-wide text-slate-500">
+                    {label}
+                  </span>
+                </div>
               ))}
-            </tbody>
-          </table>
-          <p>Each of these started the same way. A real operational problem, usually messy, repetitive, and high-friction. Instead of patching around it, I built systems designed to fully replace the workflow with something structured, reliable, and scalable.</p>
-          <p>Under the hood, I spend most of my time working across Go, Python, React, and PostgreSQL, building multi-tenant systems, high-volume data pipelines, and real-time platforms. Infrastructure typically lives across AWS and Cloudflare, optimized for performance, cost, and reliability.</p>
-          <p>Before starting Snydex, I worked at <strong>Flatiron Health</strong> on ML Prediction platforms for the pursuit of extending and improving the lives of every person with cancer. I focused on improving data pipelines, observability, and production reliability for machine learning workflows. That experience heavily shapes how I build today. I think in terms of systems that need to run continuously, handle real data, and be debuggable when things go wrong.</p>
-          <p>At the core, I&apos;m most interested in building products from the ground up. Especially ones that take messy, real-world operations and turn them into clean, scalable systems that people rely on every day.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <span
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
+              style={{ backgroundColor: 'rgba(251,113,133,0.1)', color: '#fb7185' }}
+            >
+              <FaHeartbeat className="text-sm" />
+            </span>
+            <p className="text-sm leading-6 text-slate-300">
+              Before Snydex, I worked on ML platforms at <strong className="text-white">Flatiron Health</strong>, improving data pipelines for cancer research systems. That job taught me a lot about building software that has to keep running, no matter what.
+            </p>
+          </div>
+
+          <p className="text-sm leading-6 text-slate-400">
+            Mostly, I just like taking messy, real-world problems and turning them into something people can actually rely on.
+          </p>
         </div>
 
-        <div className="flex items-center justify-center gap-6 border-t border-white/10 px-8 py-5">
+        <div className="relative flex items-center justify-center gap-3 border-t border-white/10 px-6 py-4 sm:px-8">
           <a
             href="https://www.linkedin.com/in/mattsnyder1/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-blue-400"
+            className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
           >
-            <FaLinkedin size={20} />
+            <FaLinkedin size={16} />
             LinkedIn
           </a>
           <a
             href="https://github.com/mattsnyder"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+            className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
           >
-            <FaGithub size={20} />
+            <FaGithub size={16} />
             GitHub
           </a>
           <a
             href="mailto:matt@snydex.io"
-            className="flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-yellow-400"
+            className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
           >
-            <FaEnvelope size={20} />
+            <FaEnvelope size={16} />
             Email
           </a>
         </div>

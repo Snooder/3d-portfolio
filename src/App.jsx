@@ -40,7 +40,7 @@ const App = () => {
                 active={active}
                 setActive={setActive}
                 scrollContainer={wrapperRef}
-                phonePaused
+                phonePaused={phoneIntroOpen}
                 onPhoneOpen={() => setPhoneIntroOpen(true)}
               />
             </section>

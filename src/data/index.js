@@ -390,31 +390,56 @@ const experiences = [
     ]
   },
   {
-    title: "Bachelors, Computer Science",
+    title: "Bachelor of Science, Computer Science",
     company_name: "Rutgers University",
     location: "New Brunswick, NJ",
     companyLogo: newbrunswick_logo,
     date: "2016 - 2020",
     details: [
-      "Earned a Bachelor of Science in Computer Science, gaining proficiency in software engineering, machine learning, and data analysis.",
-      "Minored in Digital Communications and Information Management (DCIM), focusing on the intersection of digital technology and communication.",
-      "Worked on projects ranging from Machine Learning, System Architecture, Computer Engineering, and Algorithms.",
+      "Completed a broad Computer Science curriculum spanning algorithms, databases, software engineering, operating systems, computer architecture, assembly, machine learning, and data analysis.",
+      "Built individual and team projects that turned classroom concepts into working software using Java, Python, SQL, Linux, and version control.",
+      "Minored in Digital Communication, Information and Media (DCIM), exploring how technology, information, and communication shape the way people work and connect.",
     ],
     icons: [
       {
+        name: "FaBrain",
+        label: "Algorithms & Data Structures",
+        description: "Studied runtime analysis, recursion, sorting, searching, trees, graphs, and the tradeoffs behind choosing an efficient approach to a problem."
+      },
+      {
+        name: "FaDatabase",
+        label: "Databases",
+        description: "Designed relational data models and worked with SQL, normalization, indexing, queries, and transactions to build dependable data-backed applications."
+      },
+      {
+        name: "FaMicrochip",
+        label: "Assembly & Computer Architecture",
+        description: "Worked close to the hardware through assembly language, memory management, processor architecture, and the low-level execution of software."
+      },
+      {
+        name: "FaLinux",
+        label: "Operating Systems",
+        description: "Learned core operating system concepts through Linux, including processes, memory, filesystems, permissions, shell tools, and systems programming."
+      },
+      {
+        name: "FaProjectDiagram",
+        label: "Course Projects",
+        description: "Built individual and team projects across software engineering, machine learning, systems, and data, with an emphasis on turning theory into working applications."
+      },
+      {
         name: "FaPython",
         label: "Python",
-        description: "Acquired a deep understanding of Python programming and successfully applied it to a variety of data analysis and machine learning projects."
+        description: "Applied Python to data analysis, automation, and machine learning projects while learning how to test, debug, and communicate technical results."
       },
       {
         name: "FaJava",
         label: "Java",
-        description: "Built a strong foundation in software engineering by gaining practical experience with Java programming."
+        description: "Built a foundation in object-oriented programming, application design, testing, and collaborative software development through Java coursework."
       },
       {
-        name: "FaLinux",
-        label: "Linux",
-        description: "Developed a solid understanding of Linux system administration, encompassing server management and troubleshooting techniques."
+        name: "FaComments",
+        label: "DCIM Minor",
+        description: "Minored in Digital Communication, Information and Media, studying how digital platforms, information systems, and communication affect people and organizations."
       }
     ]
   }

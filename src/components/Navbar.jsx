@@ -10,8 +10,8 @@ import { logEvent } from "../analytics";
 const navLinks = [
   { id: "hero",       title: "Home"       },
   { id: "experience", title: "Experience" },
-  { id: "designs",    title: "Designs"    },
   { id: "github",     title: "GitHub"     },
+  { id: "designs",    title: "Designs"    },
   { id: "events",     title: "Events"     },
   { id: "contact",    title: "Contact"    },
 ];
@@ -86,7 +86,7 @@ const Navbar = ({ active, setActive }) => {
               <FaGift size={28} color="#FFD700" />
             </button>
             {isTooltipVisible && (
-              <div className="absolute top-10 right-0 w-48 px-2 py-1 text-xs text-white bg-black rounded whitespace-normal">
+              <div className="absolute bottom-12 right-0 w-48 rounded bg-black px-2 py-1 text-xs text-white whitespace-normal">
                 Reach 70% to bypass the easter egg hunt!
               </div>
             )}

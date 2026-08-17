@@ -111,11 +111,9 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className="text-center"
       >
-        <JiggleSpinComponent shadowColor="rgba(255, 0, 0, 0.8)" eggColor="red">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-violet-300/80">
-            Selected interface work
-          </p>
-        </JiggleSpinComponent>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-violet-300/80">
+          Selected interface work
+        </p>
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
           Product / Web Designs
         </h2>
@@ -165,9 +163,31 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
                     className="mb-5 block h-1 w-12 rounded-full"
                     style={{ backgroundColor: activeDesign.accent }}
                   />
-                  <h3 className="text-2xl font-bold leading-tight text-white sm:text-3xl">
-                    {activeDesign.title}
-                  </h3>
+                  {activeIndex === 0 ? (
+                    <JiggleSpinComponent shadowColor="rgba(255, 0, 0, 0.8)" eggColor="red">
+                      <h3
+                        className="inline-flex border-l-4 px-4 py-3 text-2xl font-bold leading-tight text-white sm:text-3xl"
+                        style={{
+                          borderColor: activeDesign.accent,
+                          backgroundColor: `${activeDesign.accent}18`,
+                          color: activeDesign.accent,
+                        }}
+                      >
+                        {activeDesign.title}
+                      </h3>
+                    </JiggleSpinComponent>
+                  ) : (
+                    <h3
+                      className="inline-flex border-l-4 px-4 py-3 text-2xl font-bold leading-tight text-white sm:text-3xl"
+                      style={{
+                        borderColor: activeDesign.accent,
+                        backgroundColor: `${activeDesign.accent}18`,
+                        color: activeDesign.accent,
+                      }}
+                    >
+                      {activeDesign.title}
+                    </h3>
+                  )}
                   <p className="mt-5 text-sm leading-7 text-slate-400 sm:text-base">
                     {activeDesign.description}
                   </p>

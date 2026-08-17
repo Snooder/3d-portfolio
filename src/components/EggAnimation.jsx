@@ -28,9 +28,8 @@ const EggAnimation = ({ triggerEgg }) => {
       {eggVisible && (
         <div key={animationKey} style={{
           position: 'absolute',
-          right: '8px',
-          top: '50%',
-          marginTop: '-17px',
+          left: '8px',
+          bottom: '24px',
           zIndex: 1000,
           animation: 'egg-fade 4s ease-in-out forwards',
         }}>
@@ -38,7 +37,7 @@ const EggAnimation = ({ triggerEgg }) => {
             <FaEgg style={{ fontSize: '35px', color: eggColor, display: 'block' }} />
             <span style={{
               position: 'absolute',
-              bottom: '-7px',
+              top: '-9px',
               right: '-10px',
               background: 'rgba(0,0,0,0.8)',
               color: 'white',

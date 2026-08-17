@@ -1,152 +1,196 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { events } from "../data";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaArrowLeft, FaArrowRight, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { useInView } from "react-intersection-observer";
-import { logEvent } from "../analytics"; // Import logEvent from analytics.js
-import JiggleSpinComponent from "./JiggleSpinComponent"; // JiggleSpin Component for Chelsea Piers, NYC
+import { events } from "../data";
+import { logEvent } from "../analytics";
+import JiggleSpinComponent from "./JiggleSpinComponent";
 
-// Bounce variant for image animation
-const bounceVariant = {
-  hidden: { opacity: 0, scale: 0.8 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 200,
-      damping: 20,
-      duration: 0.5,
-    },
-  },
-};
+const eventAccents = ["#38bdf8", "#818cf8", "#a78bfa", "#f59e0b"];
 
-// Heading animation variant (similar to Experience section)
-const headingVariant = {
-  hidden: { opacity: 0, y: -20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.75,
-      ease: "easeInOut",
-    },
-  },
+const slideVariants = {
+  enter: (direction) => ({ opacity: 0, x: direction > 0 ? 24 : -24 }),
+  center: { opacity: 1, x: 0 },
+  exit: (direction) => ({ opacity: 0, x: direction > 0 ? -18 : 18 }),
 };
 
 const EventGallery = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  // Add the useInView hook to track when the Event Gallery comes into view
+  const [direction, setDirection] = useState(1);
+  const activeEvent = events[activeIndex];
+  const activeAccent = eventAccents[activeIndex % eventAccents.length];
   const [eventGalleryRef, eventGalleryInView] = useInView({
-    threshold: 0.1, // Trigger when 10% of the section is visible
-    triggerOnce: true, // Only trigger the animation once
+    threshold: 0.1,
+    triggerOnce: true,
   });
 
-  // Handle left arrow click
-  const handlePrevClick = () => {
-    logEvent("Event Gallery", "Button Click", "Previous Arrow"); // Log the left arrow click
-    setActiveIndex((prevIndex) => (prevIndex === 0 ? events.length - 1 : prevIndex - 1));
-  };
-
-  // Handle right arrow click
-  const handleNextClick = () => {
-    logEvent("Event Gallery", "Button Click", "Next Arrow"); // Log the right arrow click
-    setActiveIndex((prevIndex) => (prevIndex === events.length - 1 ? 0 : prevIndex + 1));
-  };
-
-  // Handle thumbnail click
-  const handleThumbnailClick = (index, eventTitle) => {
-    logEvent("Event Gallery", "Thumbnail Click", eventTitle); // Log thumbnail click with event title
+  const selectEvent = (index, shouldLog = true) => {
+    if (index === activeIndex) return;
+    setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
+    if (shouldLog) logEvent("Event Gallery", "Select", events[index].title);
   };
+
+  const cycleEvent = (step) => {
+    const nextIndex = (activeIndex + step + events.length) % events.length;
+    setDirection(step);
+    setActiveIndex(nextIndex);
+    logEvent("Event Gallery", "Navigate", step > 0 ? "Next" : "Previous");
+  };
+
+  const eventTitle = (
+    <h3
+      className="border-l-4 px-4 py-3 text-2xl font-bold leading-tight sm:text-3xl"
+      style={{
+        borderColor: activeAccent,
+        backgroundColor: `${activeAccent}14`,
+        color: activeAccent,
+      }}
+    >
+      {activeEvent.title}
+    </h3>
+  );
 
   return (
-    <div className="container mx-auto px-6 py-12 text-center md:text-left md:px-20 lg:px-40">
-      {/* Section Title with motion animation and glowing shadow */}
-      <motion.div
+    <section className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
+      <motion.header
         ref={eventGalleryRef}
-        variants={headingVariant}
-        initial="hidden"
-        animate={eventGalleryInView ? "show" : "hidden"}
-        className="xs:text-left xs:px-20 sm:px-20"
+        initial={{ opacity: 0, y: 18 }}
+        animate={eventGalleryInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="text-center"
       >
-        <h2
-          className="text-2xl text-center xs:text-3xl sm:text-4xl md:text-5xl font-bold filter drop-shadow-[0_0_20px_rgba(0,128,255,0.8)] mb-10"
-        >
-          Events
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-amber-300/80">
+          Beyond the screen
+        </p>
+        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          Events &amp; Community
         </h2>
-      </motion.div>
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400 sm:text-base">
+          A few moments with the teams, communities, and people that have shaped the work.
+        </p>
+      </motion.header>
 
-      {/* Thumbnails Row with Arrows */}
-      <div className="flex items-center justify-center space-x-4 mb-6">
-        {/* Left Arrow */}
-        <button
-          onClick={handlePrevClick}
-          className="w-12 h-12 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 hover:shadow-[0_0_15px_rgba(255,215,0,0.8)] transition flex items-center justify-center"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
+      <div className="mt-12 overflow-hidden border-y border-white/15 bg-[#070b14]">
+        <div className="grid lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.8fr)]">
+          <div className="relative min-h-[420px] overflow-hidden border-b border-white/10 lg:min-h-[620px] lg:border-b-0 lg:border-r">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.figure
+                key={activeEvent.image}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0"
+              >
+                <img
+                  src={activeEvent.image}
+                  alt={activeEvent.title}
+                  className="h-full w-full object-cover"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/10" />
+                <figcaption className="absolute bottom-5 left-5 text-xs font-medium uppercase tracking-[0.18em] text-white/65">
+                  {activeEvent.location}
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
+          </div>
 
-        {/* Thumbnails */}
-        <div className="grid grid-cols-2 xs:grid-cols-2 sm:flex sm:justify-center sm:space-x-4">
-          {events.map((event, index) => (
-            <div
-              key={index}
-              onClick={() => handleThumbnailClick(index, event.title)} // Log thumbnail click
-              className={`cursor-pointer w-24 h-24 rounded-lg overflow-hidden border-4 transition-all duration-300 ${
-                activeIndex === index
-                  ? "border-yellow-500 shadow-[0_0_15px_rgba(255,215,0,0.8)]"
-                  : "border-transparent"
-              } hover:border-yellow-500 hover:shadow-[0_0_15px_rgba(255,215,0,0.8)]`}
-            >
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-full object-cover"
-              />
+          <div className="flex min-h-[500px] flex-col justify-between p-6 sm:p-8 lg:min-h-[620px] lg:p-10">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={`${activeEvent.title}-details`}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  <span>Event {String(activeIndex + 1).padStart(2, "0")}</span>
+                  <span>{String(events.length).padStart(2, "0")} total</span>
+                </div>
+
+                <div className="mt-8">
+                  {activeEvent.title === "Flatiron Health | 10 Year Anniversary" ? (
+                    <JiggleSpinComponent shadowColor="rgba(128,0,128,0.8)" eggColor="purple">
+                      {eventTitle}
+                    </JiggleSpinComponent>
+                  ) : eventTitle}
+                </div>
+
+                <p className="mt-6 text-sm leading-7 text-slate-400 sm:text-base">
+                  {activeEvent.longDescription}
+                </p>
+
+                <dl className="mt-8 border-y border-white/10 text-sm">
+                  <div className="flex items-center gap-3 border-b border-white/10 py-4">
+                    <FaMapMarkerAlt aria-hidden="true" style={{ color: activeAccent }} />
+                    <dt className="w-20 text-slate-500">Location</dt>
+                    <dd className="text-slate-200">{activeEvent.location}</dd>
+                  </div>
+                  <div className="flex items-center gap-3 py-4">
+                    <FaCalendarAlt aria-hidden="true" style={{ color: activeAccent }} />
+                    <dt className="w-20 text-slate-500">Date</dt>
+                    <dd className="text-slate-200">{activeEvent.date}</dd>
+                  </div>
+                </dl>
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="mt-10 flex gap-3">
+              <button
+                type="button"
+                onClick={() => cycleEvent(-1)}
+                aria-label="Previous event"
+                className="flex h-12 flex-1 items-center justify-center gap-2 border border-white/15 text-sm font-semibold text-slate-300 transition-colors hover:border-white/30 hover:text-white"
+              >
+                <FaArrowLeft aria-hidden="true" className="text-xs" />
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => cycleEvent(1)}
+                aria-label="Next event"
+                className="flex h-12 flex-1 items-center justify-center gap-2 bg-white text-sm font-semibold text-slate-950 transition-colors hover:bg-slate-200"
+              >
+                Next
+                <FaArrowRight aria-hidden="true" className="text-xs" />
+              </button>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Right Arrow */}
-        <button
-          onClick={handleNextClick}
-          className="w-12 h-12 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 hover:shadow-[0_0_15px_rgba(255,215,0,0.8)] transition flex items-center justify-center"
-        >
-          <FontAwesomeIcon icon={faArrowRight} />
-        </button>
+        <div className="grid grid-cols-2 border-t border-white/10 sm:grid-cols-4" aria-label="Choose an event">
+          {events.map((event, index) => {
+            const isSelected = activeIndex === index;
+            const accent = eventAccents[index % eventAccents.length];
+            return (
+              <button
+                key={event.title}
+                type="button"
+                onClick={() => selectEvent(index)}
+                aria-pressed={isSelected}
+                className="group flex min-w-0 items-center gap-3 border-b border-r border-white/10 p-3 text-left transition-colors hover:bg-white/[0.04] sm:border-b-0"
+              >
+                <img src={event.image} alt="" className="h-12 w-12 shrink-0 object-cover" />
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: isSelected ? accent : "#64748b" }}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className={`mt-1 block truncate text-xs font-medium ${isSelected ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`}>
+                    {event.title.replace("Flatiron Health | ", "")}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
-
-      {/* Event Details underneath the thumbnails */}
-      <div className="text-white mb-6 text-center flex flex-col items-center justify-center">
-        {events[activeIndex].title === "Flatiron Health | All-Hands 2023 (Team Zelda)" ? (
-          <JiggleSpinComponent shadowColor="rgba(128,0,128,0.8)" eggColor="purple">
-            <h3 className="text-xl font-bold">{events[activeIndex].title}</h3>
-          </JiggleSpinComponent>
-        ) : (
-          <h3 className="text-xl font-bold">{events[activeIndex].title}</h3>
-        )}
-        <p className="text-md">{events[activeIndex].location}</p>
-        <p className="text-sm">{events[activeIndex].date}</p>
-      </div>
-
-      {/* Main Image with Bounce Animation */}
-      <motion.div
-        key={activeIndex} // Ensure a new image triggers animation
-        variants={bounceVariant} // Bounce animation for image
-        initial="hidden"
-        animate="show"
-        className="relative w-full"
-      >
-        <img
-          src={events[activeIndex].image}
-          alt={events[activeIndex].title}
-          className="w-full object-cover rounded-lg shadow-[0_0_10px_rgba(128,128,128,0.6)] hover:shadow-[0_0_30px_rgba(255,215,0,1)] transition-all duration-300"
-        />
-      </motion.div>
-    </div>
+    </section>
   );
 };
 

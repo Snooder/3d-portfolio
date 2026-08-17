@@ -1,7 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect } from "react";
 import { FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa"; // Icons for Email, LinkedIn, and GitHub
-import { SectionWrapper } from "../hoc";
 import { logEvent } from "../analytics"; // Import logEvent from analytics.js
 import JiggleSpinComponent from "./JiggleSpinComponent";
 
@@ -19,7 +18,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
+    <div className="w-full pb-20 pt-16">
       <motion.div
         initial="hidden"
         animate={controls}
@@ -32,78 +31,77 @@ const Contact = () => {
           },
         }}
       >
-        <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#090e1d]/90 p-6 shadow-[0_20px_70px_rgba(0,0,0,0.25)] sm:p-8">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_50%_0%,rgba(52,211,153,0.14),transparent_55%)]" />
+        <div className="relative left-1/2 w-screen -translate-x-1/2 border-y border-white/15 bg-white/[0.012] py-10 sm:py-14">
+          <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-0 lg:px-12">
+            <div className="lg:pr-14">
+              <JiggleSpinComponent shadowColor="rgba(255, 215, 0, 0.8)" eggColor="yellow">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-400">
+                  Available to connect
+                </p>
+              </JiggleSpinComponent>
 
-          <div className="relative text-center">
-            <JiggleSpinComponent shadowColor="rgba(255, 215, 0, 0.8)" eggColor="yellow">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300/80">
-                Say hello
+              <h2 className="mt-5 max-w-xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                Have something worth building?
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-7 text-slate-400">
+                I&apos;m interested in thoughtful products, difficult systems, and teams that care about the people using their work.
               </p>
-            </JiggleSpinComponent>
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-              Want to get in touch?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-400 sm:text-base">
-              Whether it&apos;s a project, an opportunity, or just to say hi, I&apos;d be happy to connect.
-            </p>
-          </div>
+              <p className="mt-8 text-sm text-slate-500">
+                Full stack engineering&nbsp;&nbsp;•&nbsp;&nbsp;AI infrastructure&nbsp;&nbsp;•&nbsp;&nbsp;Product engineering
+              </p>
+            </div>
 
-          <div className="relative mt-8 flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-8 sm:flex-row">
-            <a
-              href="mailto:matthew.swe.snyder@gmail.com"
-              data-platform="Email Button"
-              onClick={handleLinkClick}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition-all hover:bg-emerald-100 sm:w-auto"
-            >
-              <FaEnvelope className="text-base" />
-              Email me
-            </a>
-            <a
-              href="https://www.linkedin.com/in/mattcsnyder/"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-platform="LinkedIn Button"
-              onClick={handleLinkClick}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white sm:w-auto"
-            >
-              <FaLinkedin className="text-base" />
-              Connect on LinkedIn
-            </a>
-          </div>
+            <div className="border-t border-white/15 pt-8 lg:border-l lg:border-t-0 lg:pl-14 lg:pt-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Contact
+              </p>
 
-          <div className="relative mt-6 flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-6 sm:flex-row sm:gap-4">
-            <a
-              href="https://www.linkedin.com/in/mattcsnyder/"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-platform="LinkedIn Small"
-              onClick={handleLinkClick}
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-400 transition-colors hover:border-white/20 hover:text-white"
-            >
-              <FaLinkedin className="text-sm" />
-              /mattcsnyder
-            </a>
-            <a
-              href="https://github.com/snooder"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-platform="GitHub Small"
-              onClick={handleLinkClick}
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-400 transition-colors hover:border-white/20 hover:text-white"
-            >
-              <FaGithub className="text-sm" />
-              /snooder
-            </a>
-            <a
-              href="mailto:matthew.swe.snyder@gmail.com"
-              data-platform="Email Small"
-              onClick={handleLinkClick}
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-400 transition-colors hover:border-white/20 hover:text-white"
-            >
-              <FaEnvelope className="text-sm" />
-              matthew.swe.snyder@gmail.com
-            </a>
+              <a
+                href="mailto:matthew.swe.snyder@gmail.com"
+                data-platform="Email Primary"
+                onClick={handleLinkClick}
+                className="group mt-5 flex items-center justify-between border-b border-white/15 pb-5 text-white transition-colors hover:border-emerald-400/60 hover:text-emerald-300"
+              >
+                <span>
+                  <span className="block text-sm text-slate-500">Email</span>
+                  <span className="mt-1 block text-lg font-medium sm:text-xl">matthew.swe.snyder@gmail.com</span>
+                </span>
+                <FaEnvelope aria-hidden="true" className="ml-4 shrink-0 text-lg" />
+              </a>
+
+              <div className="grid grid-cols-2 border-b border-white/15">
+                <a
+                  href="https://www.linkedin.com/in/mattcsnyder/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-platform="LinkedIn"
+                  onClick={handleLinkClick}
+                  className="group flex items-center gap-3 border-r border-white/15 py-5 pr-4 text-slate-300 transition-colors hover:text-white"
+                >
+                  <FaLinkedin aria-hidden="true" />
+                  <span className="text-sm font-medium">LinkedIn</span>
+                  <span aria-hidden="true" className="ml-auto text-slate-600 group-hover:text-slate-300">↗</span>
+                </a>
+
+                <a
+                  href="https://github.com/snooder"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-platform="GitHub"
+                  onClick={handleLinkClick}
+                  className="group flex items-center gap-3 py-5 pl-4 text-slate-300 transition-colors hover:text-white"
+                >
+                  <FaGithub aria-hidden="true" />
+                  <span className="text-sm font-medium">GitHub</span>
+                  <span aria-hidden="true" className="ml-auto text-slate-600 group-hover:text-slate-300">↗</span>
+                </a>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-1 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                <span>New York City or remote</span>
+                <span>Replies within one business day</span>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -111,4 +109,4 @@ const Contact = () => {
   );
 };
 
-export default SectionWrapper(Contact, "contact");
+export default Contact;

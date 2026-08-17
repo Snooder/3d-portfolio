@@ -12,7 +12,10 @@ import {
     FaReact,
     FaNodeJs,
     FaCloud, 
-    FaBrain
+    FaBrain,
+    FaComments,
+    FaMicrochip,
+    FaProjectDiagram
   } from 'react-icons/fa';
   import { SiJenkins, SiPytorch, SiTerraform } from 'react-icons/si';
   import { SiMysql } from "react-icons/si";
@@ -49,9 +52,12 @@ import JiggleSpinComponent from './JiggleSpinComponent';
     FaGolang,
     FaNodeJs,
     FaCloud, 
-    FaBrain
+    FaBrain,
+    FaComments,
+    FaMicrochip,
+    FaProjectDiagram
   };
-  
+
   const ExperienceIcons = ({ icons = [], showDescription=true, size=100 }) => (
       <div className="flex flex-wrap justify-center space-x-4">
         {icons.length > 0 ? (
@@ -100,7 +106,5 @@ import JiggleSpinComponent from './JiggleSpinComponent';
         )}
       </div>
     );
-    
+
     export default ExperienceIcons;
-    
-  

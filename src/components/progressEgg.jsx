@@ -3,21 +3,20 @@ import { FaEgg } from "react-icons/fa";
 import { MdOutlineEgg } from "react-icons/md";
 import { logEvent } from "../analytics"; // Import logEvent for tracking clicks
 
-// Helper function to convert CSS color to RGB
-function getRgbColor(color) {
-  const tempDiv = document.createElement("div");
-  tempDiv.style.color = color;
-  document.body.appendChild(tempDiv);
-  const rgbColor = getComputedStyle(tempDiv).color;
-  document.body.removeChild(tempDiv);
-  const rgbValues = rgbColor.match(/\d+/g);
-  return rgbValues ? rgbValues.join(", ") : "0, 0, 0";
-}
+const ProgressEgg = ({ color, tooltip, found, startAnimation, size = 50 }) => {
+  const handleEggClick = (event) => {
+    event.preventDefault();
+    logEvent("Egg Hunt", "Click", `Location - ${tooltip.label}`);
+    const destination = document.querySelector(tooltip.url);
+    const wrapper = document.querySelector(".wrapper");
 
-const ProgressEgg = ({ color, tooltip, found, startAnimation }) => {
-  // Handle tooltip link click logging
-  const handleTooltipClick = (label) => {
-    logEvent("Egg Hunt", "Click", `Tooltip - ${label}`);
+    if (destination && wrapper) {
+      wrapper.scrollTo({
+        top: wrapper.scrollTop + destination.getBoundingClientRect().top - 60,
+        behavior: "smooth",
+      });
+      window.history.replaceState(null, "", tooltip.url);
+    }
   };
 
   return (
@@ -28,85 +27,66 @@ const ProgressEgg = ({ color, tooltip, found, startAnimation }) => {
         transition: `opacity 500ms ease-in-out`,
       }}
     >
-      {found ? (
-        <FaEgg
-          size={50}
-          style={{ color: color, opacity: 0.75 }}
-          aria-label={`Filled egg`}
-        />
-      ) : (
-        <MdOutlineEgg
-          size={50}
-          style={{ color: color, opacity: 0.75 }}
-          aria-label={`Empty egg`}
-        />
-      )}
-
-      {/* Tooltip */}
-      {tooltip.label === "Mystery" ? (
-        <span
-          className="tooltip"
-          style={{
-            backgroundColor: `rgba(${getRgbColor(color)}, 0.5)`,
-          }}
-        >
-          {tooltip.label}
-        </span>
-      ) : (
-        <a
-          href={tooltip.url}
-          className="tooltip-link"
-          style={{
-            backgroundColor: `rgba(${getRgbColor(color)}, 0.5)`,
-          }}
-          onClick={() => handleTooltipClick(tooltip.label)} // Log tooltip link click
-        >
-          {tooltip.label}
-        </a>
-      )}
+      <a
+        href={tooltip.url}
+        className="egg-link"
+        onClick={handleEggClick}
+        aria-label={`Go to ${tooltip.label} for the ${color} egg`}
+      >
+        {found ? (
+          <FaEgg
+            size={size}
+            style={{ color, opacity: 0.8 }}
+            aria-hidden="true"
+          />
+        ) : (
+          <MdOutlineEgg
+            size={size}
+            style={{ color, opacity: 0.8 }}
+            aria-hidden="true"
+          />
+        )}
+        <span className="location-label">{tooltip.label}</span>
+      </a>
 
       {/* CSS styling */}
       <style jsx>{`
         .egg-container {
           position: relative;
           display: inline-block;
-          transition: transform 0.3s ease-in-out;
         }
 
-        /* Egg grows larger on hover */
-        .egg-container:hover {
-          transform: scale(1.2);
+        .egg-link {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          color: inherit;
+          text-decoration: none;
         }
 
-        /* Tooltip styling */
-        .tooltip,
-        .tooltip-link {
-          visibility: hidden;
-          position: absolute;
-          bottom: -40px;
-          left: 50%;
-          transform: translateX(-50%);
-          color: white;
-          padding: 8px 12px;
-          border-radius: 6px;
-          font-size: 14px;
-          white-space: nowrap;
-          z-index: 1;
-          opacity: 0;
-          transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+        .egg-link svg {
+          transition: transform 180ms ease, opacity 180ms ease;
         }
 
-        /* Tooltip link styling */
-        .tooltip-link {
-          text-decoration: none; /* Remove underline from link */
+        .egg-link:hover svg,
+        .egg-link:focus-visible svg {
+          transform: translateY(-2px) scale(1.08);
+          opacity: 1 !important;
         }
 
-        /* Show tooltip on hover */
-        .egg-container:hover .tooltip,
-        .egg-container:hover .tooltip-link {
-          visibility: visible;
-          opacity: 1;
-          transition: opacity 0.3s ease-in-out;
+        .location-label {
+          color: #64748b;
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          transition: color 180ms ease;
+        }
+
+        .egg-link:hover .location-label,
+        .egg-link:focus-visible .location-label {
+          color: #e2e8f0;
         }
       `}</style>
     </div>

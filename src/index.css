@@ -244,6 +244,23 @@ body.modal-open .jiggle-animation {
   animation: prize-egg-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+.prize-egg-dancer {
+  filter: drop-shadow(0 0 10px currentColor);
+  animation-name: prize-egg-party;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transition: filter 180ms ease;
+}
+
+.prize-egg-dancer--reverse {
+  animation-name: prize-egg-party-reverse;
+}
+
+.prize-egg:hover .prize-egg-dancer {
+  animation-duration: 0.65s !important;
+  filter: drop-shadow(0 0 18px currentColor) brightness(1.25);
+}
+
 @keyframes prize-glow-spin {
   to { transform: rotate(360deg) scale(1.08); }
 }
@@ -269,6 +286,22 @@ body.modal-open .jiggle-animation {
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes prize-egg-party {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(250, 204, 21, 0); }
+  22% { transform: translateY(-13px) rotate(-10deg) scale(1.08); box-shadow: 0 0 22px color-mix(in srgb, currentColor 45%, transparent); }
+  42% { transform: translateY(1px) rotate(8deg) scale(0.98); }
+  62% { transform: translateY(-6px) rotate(-5deg) scale(1.04); }
+  78% { transform: translateY(0) rotate(3deg) scale(1); }
+}
+
+@keyframes prize-egg-party-reverse {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(250, 204, 21, 0); }
+  22% { transform: translateY(-13px) rotate(10deg) scale(1.08); box-shadow: 0 0 22px color-mix(in srgb, currentColor 45%, transparent); }
+  42% { transform: translateY(1px) rotate(-8deg) scale(0.98); }
+  62% { transform: translateY(-6px) rotate(5deg) scale(1.04); }
+  78% { transform: translateY(0) rotate(-3deg) scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .prize-celebration-glow,
   .prize-confetti {
@@ -279,7 +312,8 @@ body.modal-open .jiggle-animation {
   .prize-kicker,
   .prize-title,
   .prize-subtitle,
-  .prize-egg {
+  .prize-egg,
+  .prize-egg-dancer {
     opacity: 1;
     transform: none;
     animation: none;

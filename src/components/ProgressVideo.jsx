@@ -75,10 +75,19 @@ const ProgressVideo = ({ onClose }) => {
           {eggColors.map((color, index) => (
             <span
               key={color}
-              className="prize-egg grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/[0.06] sm:h-14 sm:w-14"
-              style={{ animationDelay: `${1.4 + index * 0.16}s`, color }}
+              className="prize-egg grid h-11 w-11 place-items-center sm:h-14 sm:w-14"
+              style={{ animationDelay: `${1.4 + index * 0.16}s` }}
             >
-              <FaEgg className="text-xl drop-shadow-[0_0_12px_currentColor] sm:text-2xl" />
+              <span
+                className={`prize-egg-dancer grid h-full w-full place-items-center rounded-full border border-white/15 bg-white/[0.06] ${index % 2 ? "prize-egg-dancer--reverse" : ""}`}
+                style={{
+                  color,
+                  animationDelay: `${2.35 + index * 0.18}s`,
+                  animationDuration: `${1.65 + (index % 3) * 0.18}s`,
+                }}
+              >
+                <FaEgg className="text-xl sm:text-2xl" />
+              </span>
             </span>
           ))}
         </div>

@@ -8,7 +8,7 @@ const TAGLINE = [
       <>
         I build software that runs{' '}
         <strong className="text-slate-200 font-semibold">real businesses</strong>{' '}
-        end-to-end.
+        <strong className="font-semibold text-yellow-300">end-to-end</strong>.
       </>
     ),
   },

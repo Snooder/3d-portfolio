@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 import { experiences } from "../data";
 import { logEvent } from "../analytics";
 import ExperienceDetailPanel from "./ExperienceDetailPanel";
+import ExperienceBubbles from "./ExperienceBubbles";
 
 const cardStyles = {
   "Snydex Platforms": {
@@ -84,7 +85,10 @@ const Experience = () => {
   useEffect(() => () => window.clearTimeout(hoverTimerRef.current), []);
 
   return (
-    <div className="mx-auto flex h-full max-w-7xl flex-col px-5 pb-16 pt-16 sm:px-8 lg:px-12">
+    <div className="relative isolate overflow-hidden">
+      <ExperienceBubbles />
+
+      <div className="pointer-events-none relative z-10 mx-auto flex h-full max-w-7xl flex-col px-5 pb-16 pt-16 sm:px-8 lg:px-12">
       <motion.div ref={ref}>
         <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.35em] text-sky-300/80">
           The path so far
@@ -98,7 +102,7 @@ const Experience = () => {
       </motion.div>
 
       <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(290px,0.8fr)_minmax(0,1.65fr)] lg:gap-12">
-        <div className="relative" aria-label="Career timeline">
+        <div className="pointer-events-auto relative" aria-label="Career timeline">
           <div className="absolute bottom-5 left-[7px] top-5 w-px bg-gradient-to-b from-sky-400/70 via-white/15 to-red-400/60" />
 
           {experiences.map((experience, index) => {
@@ -149,12 +153,13 @@ const Experience = () => {
           })}
         </div>
 
-        <div className="lg:sticky lg:top-24">
+        <div className="pointer-events-auto lg:sticky lg:top-24">
           <ExperienceDetailPanel
             selectedExperience={selectedExperience}
             selectedTheme={selectedTheme}
           />
         </div>
+      </div>
       </div>
     </div>
   );

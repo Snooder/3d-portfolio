@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { events } from "../data";
 import { logEvent } from "../analytics";
 import JiggleSpinComponent from "./JiggleSpinComponent";
+import EnergyLinesBackground from "./EnergyLinesBackground";
 
 const eventAccents = ["#38bdf8", "#818cf8", "#a78bfa", "#f59e0b"];
 
@@ -52,7 +53,9 @@ const EventGallery = () => {
   );
 
   return (
-    <section className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
+    <div className="relative isolate w-full overflow-hidden">
+      <EnergyLinesBackground variant="events" />
+      <section className="relative z-10 mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
       <motion.header
         ref={eventGalleryRef}
         initial={{ opacity: 0, y: 18 }}
@@ -88,6 +91,8 @@ const EventGallery = () => {
                 <img
                   src={activeEvent.image}
                   alt={activeEvent.title}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/10" />
@@ -176,7 +181,7 @@ const EventGallery = () => {
                 aria-pressed={isSelected}
                 className="group flex min-w-0 items-center gap-3 border-b border-r border-white/10 p-3 text-left transition-colors hover:bg-white/[0.04] sm:border-b-0"
               >
-                <img src={event.image} alt="" className="h-12 w-12 shrink-0 object-cover" />
+                <img src={event.image} alt="" loading="lazy" decoding="async" className="h-12 w-12 shrink-0 object-cover" />
                 <span className="min-w-0">
                   <span className="block text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: isSelected ? accent : "#64748b" }}>
                     {String(index + 1).padStart(2, "0")}
@@ -190,7 +195,8 @@ const EventGallery = () => {
           })}
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

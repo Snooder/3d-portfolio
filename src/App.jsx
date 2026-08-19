@@ -1,17 +1,22 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { lazy, Suspense, useRef, useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Contact, Experience, Hero, Navbar, Portfolio} from "./components";
-import EventGallery from "./components/EventGallery";
-import GithubShowcase from "./components/GithubShowcase";
-import ProgressEggHunt from "./components/ProgressEggHunt";
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
 import { initGA, logPageView } from "./analytics";
 import { EggProvider } from "./context/EggContext"; // Import EggProvider
-import RecentProjects from "./components/RecentProjects";
-import DesignsGallery from "./components/DesignsGallery";
 import RecruiterBanner from "./components/RecruiterBanner";
-import AboutMeModal from "./components/AboutMeModal";
 import PhoneIntroOverlay from "./components/PhoneHeader/PhoneIntroOverlay";
 import EggToast from "./components/EggToast";
+import ThanksBanner from "./components/ThanksBanner";
+import DeferredSection from "./components/DeferredSection";
+
+const Experience = lazy(() => import("./components/Experience"));
+const GithubShowcase = lazy(() => import("./components/GithubShowcase"));
+const DesignsGallery = lazy(() => import("./components/DesignsGallery"));
+const EventGallery = lazy(() => import("./components/EventGallery"));
+const Contact = lazy(() => import("./components/Contact"));
+const ProgressEggHunt = lazy(() => import("./components/ProgressEggHunt"));
+const AboutMeModal = lazy(() => import("./components/AboutMeModal"));
 
 const App = () => {
   const wrapperRef = useRef(null);
@@ -35,7 +40,7 @@ const App = () => {
           )}
           <Navbar active={active} setActive={setActive}/>
           <main className="wrapper" ref={wrapperRef}>
-            <section id="hero" className="z-40">
+            <section id="hero" className="relative z-40 w-full bg-[#020818]">
               <Hero
                 active={active}
                 setActive={setActive}
@@ -46,31 +51,36 @@ const App = () => {
             </section>
             <RecruiterBanner onReadMore={() => setAboutOpen(true)} />
             <section id="experience" className="relative z-30 mb-8 bg-primary">
-              <Experience />
+              <DeferredSection minHeight={1050}><Experience /></DeferredSection>
             </section>
-            <section id="github" className="relative z-30 mb-8 bg-primary">
-              <GithubShowcase />
+            <section id="github" className="relative z-30 bg-primary">
+              <DeferredSection minHeight={1100}><GithubShowcase /></DeferredSection>
             </section>
-            <section id="designs" className="relative z-30 mb-8 bg-primary">
-              <DesignsGallery />
+            <section id="designs" className="relative z-30 bg-primary">
+              <DeferredSection minHeight={900}><DesignsGallery /></DeferredSection>
             </section>
-            <section id="events" className="relative z-30 mb-8 bg-primary">
-              <EventGallery />
+            <ThanksBanner />
+            <section id="events" className="relative z-30 bg-primary">
+              <DeferredSection minHeight={850}><EventGallery /></DeferredSection>
             </section>
             <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
               <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
             <section id="contact" className="relative z-30 bg-primary">
-              <Contact />
+              <DeferredSection minHeight={420}><Contact /></DeferredSection>
             </section>
             <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
               <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
             <section id="eggHunt" className="relative z-30 bg-primary">
-              <ProgressEggHunt />
+              <DeferredSection minHeight={420}><ProgressEggHunt /></DeferredSection>
             </section>
           </main>
-          {aboutOpen && <AboutMeModal onClose={() => setAboutOpen(false)} />}
+          {aboutOpen && (
+            <Suspense fallback={null}>
+              <AboutMeModal onClose={() => setAboutOpen(false)} />
+            </Suspense>
+          )}
           <EggToast />
         </div>
       </BrowserRouter>

@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fa';
 import { FaGolang } from 'react-icons/fa6';
 import { SiCloudflare } from 'react-icons/si';
+import useCopyEmail from '../hooks/useCopyEmail';
 
 const engagementTypes = [
   { icon: FaRocket, accent: '#38bdf8', title: 'Greenfield builds', desc: 'Taking an idea all the way to production.' },
@@ -44,6 +45,7 @@ const techStack = [
 ];
 
 const AboutMeModal = ({ onClose }) => {
+  const { copied, copyEmail } = useCopyEmail();
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') onClose();
@@ -194,13 +196,15 @@ const AboutMeModal = ({ onClose }) => {
             <FaGithub size={16} />
             GitHub
           </a>
-          <a
-            href="mailto:matt@snydex.io"
+          <button
+            type="button"
+            onClick={copyEmail}
+            aria-live="polite"
             className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
           >
             <FaEnvelope size={16} />
-            Email
-          </a>
+            {copied ? 'Copied!' : 'Copy email'}
+          </button>
         </div>
       </div>
     </div>,

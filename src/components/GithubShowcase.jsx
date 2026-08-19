@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import JiggleSpinComponent from "./JiggleSpinComponent";
 import { githubRepos } from "../data";
 import { textVariant, fadeIn, staggerContainer } from "../utils/motion";
 import { logEvent } from "../analytics"; // Import logEvent for logging interactions
+import GithubTerminalBackground from "./GithubTerminalBackground";
 
 const languageStyles = {
   All: { accent: "#c084fc" },
@@ -84,6 +85,8 @@ const getTechnologyBadges = (repo) => {
 const GithubShowcase = ({ compact = false }) => {
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const [selectedTool, setSelectedTool] = useState("All");
+  const [visibleRows, setVisibleRows] = useState(5);
+  const [columnCount, setColumnCount] = useState(1);
   const languages = ["All", ...Object.keys(githubRepos)];
   const selectedLanguage = languages[selectedLanguageIndex];
   const languageRepos =
@@ -104,6 +107,23 @@ const GithubShowcase = ({ compact = false }) => {
   const repos = selectedTool === "All"
     ? languageRepos
     : languageRepos.filter((repo) => getTechnologyBadges(repo).includes(selectedTool));
+  const visibleRepos = repos.slice(0, visibleRows * columnCount);
+  const hasMoreRepos = visibleRepos.length < repos.length;
+
+  useEffect(() => {
+    const updateColumnCount = () => {
+      if (compact) {
+        setColumnCount(window.innerWidth >= 640 ? 2 : 1);
+        return;
+      }
+
+      setColumnCount(window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
+    };
+
+    updateColumnCount();
+    window.addEventListener("resize", updateColumnCount);
+    return () => window.removeEventListener("resize", updateColumnCount);
+  }, [compact]);
 
   const [ref, inView] = useInView({
     threshold: 0.1,
@@ -117,18 +137,28 @@ const GithubShowcase = ({ compact = false }) => {
 
   // Handle changing the selected language and log the event
   const handleLanguageClick = (index, language) => {
-    setSelectedLanguageIndex(index);
+    const nextIndex = language !== "All" && selectedLanguage === language ? 0 : index;
+    const nextLanguage = languages[nextIndex];
+
+    setSelectedLanguageIndex(nextIndex);
     setSelectedTool("All");
-    logEvent("Language Switch", "Change", language); // Log the language switch
+    setVisibleRows(5);
+    logEvent("Language Switch", "Change", nextLanguage); // Log the language switch
   };
 
   const handleToolClick = (tool) => {
-    setSelectedTool(tool);
-    logEvent("Repository Tool", "Change", tool);
+    const nextTool = tool !== "All" && selectedTool === tool ? "All" : tool;
+
+    setSelectedTool(nextTool);
+    setVisibleRows(5);
+    logEvent("Repository Tool", "Change", nextTool);
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
+    <div className="relative isolate min-h-[1100px] overflow-hidden">
+      <GithubTerminalBackground />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 lg:px-12">
       {/* Motion div for the "GitHub & More" title with blue glow */}
       <motion.div
         ref={ref}
@@ -162,6 +192,7 @@ const GithubShowcase = ({ compact = false }) => {
                     <button
                       type="button"
                       aria-pressed={isSelected}
+                      aria-label={isSelected && language !== "All" ? `Clear ${language} filter` : `Filter by ${language}`}
                       onClick={() => handleLanguageClick(index, language)}
                       className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
                         isSelected
@@ -194,6 +225,7 @@ const GithubShowcase = ({ compact = false }) => {
                     key={tool}
                     type="button"
                     aria-pressed={isSelected}
+                    aria-label={isSelected && tool !== "All" ? `Clear ${tool} filter` : `Filter by ${tool}`}
                     onClick={() => handleToolClick(tool)}
                     className="shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all hover:-translate-y-0.5"
                     style={{
@@ -241,7 +273,7 @@ const GithubShowcase = ({ compact = false }) => {
             No repositories using {selectedTool} in this language yet.
           </div>
         )}
-        {repos.map((repo, index) => {
+        {visibleRepos.map((repo, index) => {
           const cardTheme = languageStyles[repo.sourceLanguage] || defaultLanguageTheme;
           const technologyBadges = getTechnologyBadges(repo);
           const primaryTechnology = technologyBadges[0];
@@ -315,6 +347,22 @@ const GithubShowcase = ({ compact = false }) => {
           );
         })}
       </motion.div>
+
+      {hasMoreRepos && (
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
+            Showing {visibleRepos.length} of {repos.length} projects
+          </p>
+          <button
+            type="button"
+            onClick={() => setVisibleRows((current) => current + 5)}
+            className="rounded-full border border-sky-400/40 bg-sky-400/10 px-7 py-3 text-sm font-bold text-sky-200 shadow-[0_0_24px_rgba(56,189,248,0.12)] transition hover:-translate-y-0.5 hover:border-sky-300/70 hover:bg-sky-400/20 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+          >
+            Show more projects
+          </button>
+        </div>
+      )}
+      </div>
     </div>
   );
 };

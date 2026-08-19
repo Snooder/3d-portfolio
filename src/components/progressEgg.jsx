@@ -50,7 +50,7 @@ const ProgressEgg = ({ color, tooltip, found, startAnimation, size = 50 }) => {
       </a>
 
       {/* CSS styling */}
-      <style jsx>{`
+      <style>{`
         .egg-container {
           position: relative;
           display: inline-block;

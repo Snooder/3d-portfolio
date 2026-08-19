@@ -3,9 +3,11 @@ import JiggleSpinComponent from './JiggleSpinComponent';
 import { matt_headshot_2026, matt_headshot_2026_live } from '../assets';
 import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
 import AboutMeModal from './AboutMeModal';
+import useCopyEmail from '../hooks/useCopyEmail';
 
 const HeroBioSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const { copied, copyEmail } = useCopyEmail();
 
   return (
     <>
@@ -52,9 +54,10 @@ const HeroBioSection = () => {
                   <a href="https://github.com/mattsnyder" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white transition-colors duration-200">
                     <FaGithub size={26} />
                   </a>
-                  <a href="mailto:matt@snydexplatforms.com" className="text-white/60 hover:text-white transition-colors duration-200">
+                  <button type="button" onClick={copyEmail} aria-live="polite" className="flex items-center gap-1.5 text-white/60 hover:text-white transition-colors duration-200">
                     <FaEnvelope size={26} />
-                  </a>
+                    <span className="text-xs">{copied ? 'Copied!' : 'Copy email'}</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,11 +1,14 @@
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect } from "react";
-import { FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa"; // Icons for Email, LinkedIn, and GitHub
+import { FaCheck, FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa"; // Icons for Email, LinkedIn, and GitHub
 import { logEvent } from "../analytics"; // Import logEvent from analytics.js
 import JiggleSpinComponent from "./JiggleSpinComponent";
+import useCopyEmail from "../hooks/useCopyEmail";
+import { RotatingTools } from "./SectionAmbientEffects";
 
 const Contact = () => {
   const controls = useAnimation();
+  const { copied, copyEmail, email } = useCopyEmail();
 
   useEffect(() => {
     controls.start("show");
@@ -18,8 +21,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="w-full pb-20 pt-16">
+    <div className="relative isolate w-full overflow-hidden">
+      <RotatingTools />
       <motion.div
+        className="relative z-10"
         initial="hidden"
         animate={controls}
         variants={{
@@ -56,18 +61,22 @@ const Contact = () => {
                 Contact
               </p>
 
-              <a
-                href="mailto:matthew.swe.snyder@gmail.com"
+              <button
+                type="button"
                 data-platform="Email Primary"
-                onClick={handleLinkClick}
-                className="group mt-5 flex items-center justify-between border-b border-white/15 pb-5 text-white transition-colors hover:border-emerald-400/60 hover:text-emerald-300"
+                onClick={(event) => {
+                  handleLinkClick(event);
+                  copyEmail();
+                }}
+                aria-live="polite"
+                className="group mt-5 flex w-full items-center justify-between border-b border-white/15 pb-5 text-left text-white transition-colors hover:border-emerald-400/60 hover:text-emerald-300"
               >
                 <span>
-                  <span className="block text-sm text-slate-500">Email</span>
-                  <span className="mt-1 block text-lg font-medium sm:text-xl">matthew.swe.snyder@gmail.com</span>
+                  <span className="block text-sm text-slate-500">{copied ? "Email copied!" : "Click to copy email"}</span>
+                  <span className="mt-1 block text-lg font-medium sm:text-xl">{email}</span>
                 </span>
-                <FaEnvelope aria-hidden="true" className="ml-4 shrink-0 text-lg" />
-              </a>
+                {copied ? <FaCheck aria-hidden="true" className="ml-4 shrink-0 text-lg text-emerald-400" /> : <FaEnvelope aria-hidden="true" className="ml-4 shrink-0 text-lg" />}
+              </button>
 
               <div className="grid grid-cols-2 border-b border-white/15">
                 <a

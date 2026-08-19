@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { FaGift } from "react-icons/fa";
+import { FaEgg } from "react-icons/fa";
 import { HashLink as Link } from "react-router-hash-link";
 import EggProgress from "./EggProgress";
 import EggAnimation from "./EggAnimation";
-import LootboxContainer from "./LootboxContainer";
 import { useEggContext } from "../context/EggContext";
 import { logEvent } from "../analytics";
 
@@ -18,14 +17,7 @@ const navLinks = [
 
 const Navbar = ({ active, setActive }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [lootboxVisible, setLootboxVisible] = useState(false);
   const { eggAnimation } = useEggContext();
-  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-
-  const toggleLootboxVisibility = () => {
-    logEvent("Lootbox", "click", "Lootbox toggled");
-    setLootboxVisible(!lootboxVisible);
-  };
 
   const handleNavClick = (id, title) => {
     setActive(id);
@@ -67,7 +59,7 @@ const Navbar = ({ active, setActive }) => {
           ))}
         </ul>
 
-        {/* Right: Gift + mobile hamburger */}
+        {/* Right: Egg hunt + mobile hamburger */}
         <div className="flex items-center gap-3 z-20">
           <EggAnimation
             color={eggAnimation?.color || "yellow"}
@@ -76,20 +68,20 @@ const Navbar = ({ active, setActive }) => {
 
           {menuOpen && <EggProgress eggsFound={[]} />}
 
-          <div className="relative">
-            <button
-              onClick={toggleLootboxVisibility}
-              onMouseEnter={() => setIsTooltipVisible(true)}
-              onMouseLeave={() => setIsTooltipVisible(false)}
-              className="cursor-pointer p-1"
+          <div className="group relative">
+            <Link
+              smooth
+              to="/#eggHunt"
+              scroll={(el) => { const wrapper = document.querySelector('.wrapper'); if (wrapper) { wrapper.scrollTo({ top: wrapper.scrollTop + el.getBoundingClientRect().top - 60, behavior: "smooth" }); } }}
+              onClick={() => logEvent("Navigation", "Click", "Egg Hunt")}
+              aria-label="Go to the egg hunt footer"
+              className="grid h-10 w-10 place-items-center rounded-full border border-yellow-200/60 bg-yellow-300/15 text-yellow-300 shadow-[0_0_20px_rgba(250,204,21,0.45)] transition-all duration-300 hover:scale-110 hover:border-yellow-100 hover:bg-yellow-300/25 hover:text-yellow-100 hover:shadow-[0_0_30px_rgba(250,204,21,0.7)] focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200"
             >
-              <FaGift size={28} color="#FFD700" />
-            </button>
-            {isTooltipVisible && (
-              <div className="absolute bottom-12 right-0 w-48 rounded bg-black px-2 py-1 text-xs text-white whitespace-normal">
-                Reach 70% to bypass the easter egg hunt!
-              </div>
-            )}
+              <FaEgg className="text-xl drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />
+            </Link>
+            <div className="pointer-events-none absolute right-0 top-12 w-max translate-y-1 rounded-lg border border-white/10 bg-black/90 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-xl transition-all group-hover:translate-y-0 group-hover:opacity-100">
+              View the egg hunt
+            </div>
           </div>
 
           {/* Mobile hamburger */}
@@ -101,15 +93,6 @@ const Navbar = ({ active, setActive }) => {
           </button>
         </div>
 
-        {/* LootboxContainer */}
-        <div
-          className={`absolute top-14 right-6 px-2 pt-2 pb-4 rounded-xl transition-opacity duration-500 ${
-            lootboxVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
-          style={{ background: 'linear-gradient(135deg, #0d2b0d 0%, #1a4d1a 50%, #0f3b0f 100%)' }}
-        >
-          <LootboxContainer />
-        </div>
       </nav>
 
       {/* Mobile dropdown */}

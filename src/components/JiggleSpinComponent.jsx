@@ -45,7 +45,7 @@ const JiggleSpinComponent = ({ children, shadowColor = "rgba(255, 215, 0, 0.8)",
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes jiggle-egg {
           0% {
             transform: translateX(0);

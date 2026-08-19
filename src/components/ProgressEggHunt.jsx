@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaCheck, FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { HashLink as Link } from "react-router-hash-link";
 import { useEggContext } from "../context/EggContext";
 import ProgressEgg from "./progressEgg";
 import ProgressButton from "./progressButton";
 import ProgressVideo from "./ProgressVideo";
+import useCopyEmail from "../hooks/useCopyEmail";
+import { FallingEggs } from "./SectionAmbientEffects";
 
 const navigationLinks = [
   { label: "Home", url: "#hero" },
@@ -30,8 +32,8 @@ const socialLinks = [
   },
   {
     label: "Email",
-    detail: "Send a message",
-    url: "mailto:matthew.swe.snyder@gmail.com",
+    detail: "Copy email address",
+    copyable: true,
     icon: FaEnvelope,
   },
 ];
@@ -47,14 +49,15 @@ const scrollWithinPortfolio = (element) => {
 
 const ProgressEggHunt = () => {
   const { eggsFound } = useEggContext();
-  const eggColors = ["white", "yellow", "green", "red", "blue", "purple"];
+  const { copied, copyEmail } = useCopyEmail();
+  const eggColors = ["white", "green", "red", "blue", "purple", "yellow"];
   const tooltips = [
     { label: "Hero", url: "#hero" },
-    { label: "Contact", url: "#contact" },
     { label: "Experience", url: "#experience" },
     { label: "Designs", url: "#designs" },
     { label: "GitHub", url: "#github" },
     { label: "Events", url: "#events" },
+    { label: "Contact", url: "#contact" },
   ];
 
   const [startAnimation, setStartAnimation] = useState(false);
@@ -85,7 +88,9 @@ const ProgressEggHunt = () => {
 
   return (
     <>
-      <div className="mx-auto max-w-7xl px-5 pb-10 pt-4 sm:px-8 lg:px-12">
+      <div className="relative isolate overflow-hidden">
+        <FallingEggs />
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-10 pt-4 sm:px-8 lg:px-12">
         <footer className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#070b16] px-6 py-7 shadow-[0_20px_70px_rgba(0,0,0,0.3)] sm:px-8">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
 
@@ -140,24 +145,30 @@ const ProgressEggHunt = () => {
                 Connect
               </p>
               <div className="mt-4 grid gap-2">
-                {socialLinks.map(({ label, detail, url, icon: Icon }) => (
-                  <a
+                {socialLinks.map(({ label, detail, url, icon: Icon, copyable }) => {
+                  const LinkElement = copyable ? "button" : "a";
+                  return (
+                  <LinkElement
                     key={label}
-                    href={url}
-                    target={label === "Email" ? undefined : "_blank"}
-                    rel={label === "Email" ? undefined : "noopener noreferrer"}
-                    className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5 transition-all hover:border-white/20 hover:bg-white/[0.06]"
+                    type={copyable ? "button" : undefined}
+                    href={copyable ? undefined : url}
+                    target={copyable ? undefined : "_blank"}
+                    rel={copyable ? undefined : "noopener noreferrer"}
+                    onClick={copyable ? copyEmail : undefined}
+                    aria-live={copyable ? "polite" : undefined}
+                    className="group flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5 text-left transition-all hover:border-white/20 hover:bg-white/[0.06]"
                   >
                     <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/[0.07] text-slate-300 transition-colors group-hover:text-amber-300">
-                      <Icon aria-hidden="true" />
+                      {copyable && copied ? <FaCheck aria-hidden="true" className="text-emerald-400" /> : <Icon aria-hidden="true" />}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold text-slate-200 group-hover:text-white">{label}</span>
-                      <span className="block truncate text-[10px] text-slate-500">{detail}</span>
+                      <span className="block text-sm font-semibold text-slate-200 group-hover:text-white">{copyable && copied ? "Copied!" : label}</span>
+                      <span className="block truncate text-[10px] text-slate-500">{copyable && copied ? "Email address copied" : detail}</span>
                     </span>
-                    <span aria-hidden="true" className="text-slate-700 transition-colors group-hover:text-amber-300">↗</span>
-                  </a>
-                ))}
+                    <span aria-hidden="true" className="text-slate-700 transition-colors group-hover:text-amber-300">{copyable ? (copied ? "✓" : "+") : "↗"}</span>
+                  </LinkElement>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -183,6 +194,7 @@ const ProgressEggHunt = () => {
             <span>Full stack engineering, AI infrastructure, and product design</span>
           </div>
         </footer>
+      </div>
       </div>
 
       {showVideo && (

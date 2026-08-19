@@ -21,6 +21,8 @@ const ExperienceDetailPanel = ({ selectedExperience, selectedTheme }) => (
                 <img
                   src={selectedExperience.companyLogo}
                   alt={`${selectedExperience.company_name} logo`}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-contain"
                 />
               </div>

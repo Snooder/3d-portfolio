@@ -149,8 +149,7 @@ export const PORTFOLIO_TOPICS = {
       {
         type: 'email',
         label: 'Email Matt',
-        detail: 'Direct message',
-        href: 'mailto:matthew.swe.snyder@gmail.com',
+        detail: 'Copy email address',
       },
       {
         type: 'linkedin',

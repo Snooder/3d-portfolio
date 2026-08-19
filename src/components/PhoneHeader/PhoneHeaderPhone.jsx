@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { INTRO_MESSAGES, PORTFOLIO_TOPICS, PRIMARY_TOPIC_IDS, PROMPT_APPS } from './phoneConversation';
+import useCopyEmail from '../../hooks/useCopyEmail';
 
 const PhoneHeaderPhone = ({ revealDelayMs = 0, intro = false, paused = false, inactive = false, onOpen, scale = 1, startExploring = false }) => {
   const messagesRef = useRef(null);
@@ -18,6 +19,7 @@ const PhoneHeaderPhone = ({ revealDelayMs = 0, intro = false, paused = false, in
   const [topicLinks, setTopicLinks] = useState([]);
   const [activeApp, setActiveApp] = useState(null);
   const [previewCycle, setPreviewCycle] = useState(0);
+  const { copied: emailCopied, copyEmail } = useCopyEmail();
 
   const previewTopicIds = ['build', 'experience', 'projects', 'stack', 'availability', 'contact'];
   const visiblePreviewTopics = Array.from({ length: 3 }, (_, offset) => (
@@ -383,14 +385,19 @@ const PhoneHeaderPhone = ({ revealDelayMs = 0, intro = false, paused = false, in
 
               {!typing && contacts.length > 0 && (
                 <div style={{ display: 'grid', gap: 6, marginTop: 9 }}>
-                  {contacts.map((contact) => (
-                    <a
+                  {contacts.map((contact) => {
+                    const ContactElement = contact.type === 'email' ? 'button' : 'a';
+                    return (
+                    <ContactElement
                       key={contact.type}
-                      href={contact.href}
+                      type={contact.type === 'email' ? 'button' : undefined}
+                      href={contact.type === 'email' ? undefined : contact.href}
                       target={contact.type === 'email' ? undefined : '_blank'}
                       rel={contact.type === 'email' ? undefined : 'noreferrer'}
+                      onClick={contact.type === 'email' ? copyEmail : undefined}
+                      aria-live={contact.type === 'email' ? 'polite' : undefined}
                       aria-label={`${contact.label}: ${contact.detail}`}
-                      style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '8px 10px', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, background: 'linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03))', textDecoration: 'none' }}
+                      style={{ display: 'flex', width: '100%', alignItems: 'center', gap: 9, padding: '8px 10px', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, background: 'linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03))', textDecoration: 'none', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}
                     >
                       <span style={{ width: 28, height: 28, flexShrink: 0, borderRadius: 8, display: 'grid', placeItems: 'center', color: '#fff', background: contact.type === 'email' ? 'linear-gradient(135deg,#ef4444,#f97316)' : contact.type === 'linkedin' ? 'linear-gradient(135deg,#0a66c2,#38bdf8)' : 'linear-gradient(135deg,#334155,#111827)' }}>
                         {contact.type === 'email' && (
@@ -404,12 +411,13 @@ const PhoneHeaderPhone = ({ revealDelayMs = 0, intro = false, paused = false, in
                         )}
                       </span>
                       <span style={{ minWidth: 0, flex: 1 }}>
-                        <span style={{ display: 'block', color: '#fff', fontSize: 10, fontWeight: 700 }}>{contact.label}</span>
-                        <span style={{ display: 'block', color: '#8e8e93', fontSize: 8, marginTop: 1 }}>{contact.detail}</span>
+                        <span style={{ display: 'block', color: '#fff', fontSize: 10, fontWeight: 700 }}>{contact.type === 'email' && emailCopied ? 'Copied!' : contact.label}</span>
+                        <span style={{ display: 'block', color: '#8e8e93', fontSize: 8, marginTop: 1 }}>{contact.type === 'email' && emailCopied ? 'Email address copied' : contact.detail}</span>
                       </span>
-                      <span aria-hidden="true" style={{ color: '#64748b', fontSize: 13 }}>›</span>
-                    </a>
-                  ))}
+                      <span aria-hidden="true" style={{ color: emailCopied && contact.type === 'email' ? '#34d399' : '#64748b', fontSize: 13 }}>{contact.type === 'email' && emailCopied ? '✓' : '›'}</span>
+                    </ContactElement>
+                    );
+                  })}
                 </div>
               )}
 

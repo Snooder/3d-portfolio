@@ -10,6 +10,7 @@ import { default as img5 } from "../assets/designs/RestuarantIQ-services.png";
 import { default as img6 } from "../assets/designs/RestuarantIQ-menuanalytics.png";
 import { default as img8 } from "../assets/designs/starfetcher_dashboard.png";
 import starfetcherMobile from "../assets/starfetcher_mobile.png";
+import EnergyLinesBackground from "./EnergyLinesBackground";
 
 const designs = [
   {
@@ -97,8 +98,10 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
   };
 
   return (
-    <section
-      className={`mx-auto w-full pb-20 pt-16 ${
+    <div className="relative isolate w-full overflow-hidden">
+      <EnergyLinesBackground variant="designs" />
+      <section
+      className={`relative z-10 mx-auto w-full pb-20 pt-8 ${
         compact
           ? "max-w-none px-5 sm:px-6 lg:px-6"
           : "max-w-7xl px-5 sm:px-8 lg:px-12"
@@ -257,6 +260,8 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
                   <img
                     src={activeDesign.image}
                     alt={activeDesign.title}
+                    loading="lazy"
+                    decoding="async"
                     className={`h-full w-full object-top ${
                       activeDesign.secondaryImage ? "object-cover" : "object-contain"
                     }`}
@@ -274,6 +279,8 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
                     <img
                       src={activeDesign.secondaryImage}
                       alt={activeDesign.secondaryLabel}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover object-top"
                     />
                     <figcaption className="absolute bottom-3 left-3 rounded-full border border-white/10 bg-slate-950/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70 backdrop-blur-md">
@@ -287,7 +294,8 @@ const DesignsGallery = ({ showNavButtons = true, compact = false }) => {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

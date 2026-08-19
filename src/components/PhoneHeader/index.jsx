@@ -7,6 +7,7 @@ import InformationPipeline from './InformationPipeline';
 const PhoneHeader = ({ onScrollTo, phonePaused = false, onPhoneOpen }) => {
   const [contactOpen, setContactOpen] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
+  const [prizeVideoOpen, setPrizeVideoOpen] = useState(false);
   const [pageVisible, setPageVisible] = useState(
     () => typeof document === 'undefined' || document.visibilityState !== 'hidden',
   );
@@ -31,14 +32,28 @@ const PhoneHeader = ({ onScrollTo, phonePaused = false, onPhoneOpen }) => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
-  const animationsPaused = phonePaused || !heroVisible || !pageVisible;
+  useEffect(() => {
+    const handlePrizeVideoChange = () => {
+      setPrizeVideoOpen(document.body.classList.contains('prize-video-open'));
+    };
+
+    handlePrizeVideoChange();
+    window.addEventListener('prize-video-change', handlePrizeVideoChange);
+    return () => window.removeEventListener('prize-video-change', handlePrizeVideoChange);
+  }, []);
+
+  const animationsPaused = phonePaused || contactOpen || prizeVideoOpen || !heroVisible || !pageVisible;
 
   return (
     <div
       ref={heroRef}
-      className="w-full relative overflow-hidden flex flex-col md:flex-row items-center justify-center gap-16 px-8 md:px-24 pt-16"
+      className="relative isolate flex w-full flex-col items-center justify-center gap-16 overflow-hidden px-8 pt-16 md:flex-row md:px-24"
       style={{
-        background: 'linear-gradient(135deg, #000000 0%, #020818 50%, #000d2e 100%)',
+        background: [
+          'radial-gradient(circle at 0% 24%, rgba(37, 99, 235, 0.34) 0%, rgba(37, 99, 235, 0.1) 24%, transparent 48%)',
+          'radial-gradient(circle at 100% 72%, rgba(16, 185, 129, 0.24) 0%, rgba(14, 116, 144, 0.1) 26%, transparent 50%)',
+          'linear-gradient(115deg, #020617 0%, #04132d 48%, #031b2b 100%)',
+        ].join(', '),
         minHeight: '100vh',
       }}
     >

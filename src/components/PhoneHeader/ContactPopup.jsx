@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { FaEnvelope, FaLinkedin, FaGithub, FaCopy, FaCheck, FaTimes } from 'react-icons/fa';
+import useCopyEmail from '../../hooks/useCopyEmail';
 
 const CONTACTS = [
   {
     icon: FaEnvelope,
     label: 'Email',
     value: 'matthew.swe.snyder@gmail.com',
-    href: 'mailto:matthew.swe.snyder@gmail.com',
     copyable: true,
   },
   {
@@ -26,19 +26,13 @@ const CONTACTS = [
 ];
 
 const ContactPopup = ({ onClose }) => {
-  const [copied, setCopied] = useState(false);
+  const { copied, copyEmail } = useCopyEmail();
 
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
   }, [onClose]);
-
-  const handleCopy = async (value) => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div
@@ -80,21 +74,31 @@ const ContactPopup = ({ onClose }) => {
               {/* Label + value */}
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-0.5">{label}</p>
-                <a
-                  href={href}
-                  target={copyable ? undefined : '_blank'}
-                  rel="noopener noreferrer"
-                  className="text-sm text-slate-200 hover:text-white truncate block transition-colors"
-                  onClick={copyable ? (e) => { e.preventDefault(); handleCopy(value); } : undefined}
-                >
-                  {value}
-                </a>
+                {copyable ? (
+                  <button
+                    type="button"
+                    onClick={copyEmail}
+                    aria-live="polite"
+                    className="block truncate text-left text-sm text-slate-200 transition-colors hover:text-white"
+                  >
+                    {copied ? 'Copied!' : value}
+                  </button>
+                ) : (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block truncate text-sm text-slate-200 transition-colors hover:text-white"
+                  >
+                    {value}
+                  </a>
+                )}
               </div>
 
               {/* Copy button (email only) */}
               {copyable && (
                 <button
-                  onClick={() => handleCopy(value)}
+                  onClick={copyEmail}
                   className="flex-shrink-0 flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border transition-all duration-200"
                   style={copied
                     ? { background: 'rgba(16,185,129,0.15)', borderColor: 'rgba(16,185,129,0.4)', color: '#34d399' }

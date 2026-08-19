@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { scan } from 'react-scan';
 
 import App from "./App";
 import "./index.css";
 
 if (import.meta.env.DEV) {
-  scan();
+  import("react-scan").then(({ scan }) => scan());
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
